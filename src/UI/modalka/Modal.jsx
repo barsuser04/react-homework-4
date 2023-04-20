@@ -1,31 +1,19 @@
-import React, { useState } from "react";
-import Button from "../../UI/button/Button";
+import React, { useRef } from "react";
+import Button from "../button/Button";
 import styled from "styled-components";
 
 const Modal = ({ onClose, addMovie }) => {
-  const [movieName, setMovieName] = useState("");
-  const [movieUrl, setMovieUrl] = useState("");
-  const [movieRating, setMovieRating] = useState("");
-
-  function titleChangeHandler(e) {
-    setMovieName(e.target.value);
-  }
-
-  function urlChangeHandler(e) {
-    setMovieUrl(e.target.value);
-  }
-
-  function ratingChangeHandler(e) {
-    setMovieRating(e.target.value);
-  }
+  const movieName = useRef();
+  const movieUrl = useRef();
+  const movieRating = useRef();
 
   const submitHandler = (event) => {
     event.preventDefault();
 
     const data = {
-      title: movieName,
-      url: movieUrl,
-      rating: movieRating,
+      title: movieName.current.value,
+      url: movieUrl.current.value,
+      rating: movieRating.current.value,
       id: Date.now().toString(),
     };
 
@@ -35,7 +23,7 @@ const Modal = ({ onClose, addMovie }) => {
 
   return (
     <>
-      <Bacdrop></Bacdrop>
+      <Bacdrop onClick={onClose}></Bacdrop>
       <Container>
         <FormStyled>
           <label
@@ -49,8 +37,7 @@ const Modal = ({ onClose, addMovie }) => {
             <input
               type="text"
               placeholder="название..."
-              onChange={titleChangeHandler}
-              value={movieName}
+              ref={movieName}
               style={{ height: "30px", width: "100%", marginTop: "10px" }}
             />
           </label>
@@ -67,8 +54,7 @@ const Modal = ({ onClose, addMovie }) => {
             <input
               type="url"
               placeholder="http/....."
-              onChange={urlChangeHandler}
-              value={movieUrl}
+              ref={movieUrl}
               style={{ height: "30px", width: "100%", marginTop: "10px" }}
             />
           </label>
@@ -85,8 +71,7 @@ const Modal = ({ onClose, addMovie }) => {
             <input
               type="number"
               placeholder="от 1 дo 5"
-              onChange={ratingChangeHandler}
-              value={movieRating}
+              ref={movieRating}
               min="1"
               max="5"
               style={{ height: "30px", width: "100%", marginTop: "10px" }}
@@ -118,8 +103,9 @@ const Bacdrop = styled.div`
   width: 100%;
   height: 100vh;
   top: 0;
-  background-color: #000000e8;
+  background-color: rgba(0, 0, 0, 0.7);
   z-index: 100;
+  backdrop-filter: blur(2px);
 `;
 
 const Container = styled.div`

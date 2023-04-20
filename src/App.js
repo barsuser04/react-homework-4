@@ -1,8 +1,9 @@
 import { useState } from "react";
 import "./App.css";
 import Header from "./components/header/Header";
-import Modal from "./components/modalka/Modal";
+import Modal from "./UI/modalka/Modal";
 import MovieItem from "./components/movieItem/MovieItem";
+import { createPortal } from "react-dom";
 
 function App() {
   const [modal, setModal] = useState(false);
@@ -21,7 +22,6 @@ function App() {
     setMovie(remove);
   }
 
-
   function addMovieHandler(data) {
     const addedMovie = [...movie, data];
     setMovie(addedMovie);
@@ -36,7 +36,11 @@ function App() {
       <div className="App">
         <Header modal={modal} onClick={openModalHandler} />
       </div>
-      {modal && <Modal addMovie={addMovieHandler} onClose={openModalHandler} />}
+      {modal &&
+        createPortal(
+          <Modal addMovie={addMovieHandler} onClose={openModalHandler} />,
+          document.getElementById("modal")
+        )}
 
       <div>
         {movie.map((el) => (

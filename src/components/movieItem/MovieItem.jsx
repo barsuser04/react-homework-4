@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../../UI/button/Button";
 import styled from "styled-components";
+import BtnNodal from "../../UI/modalka/BtnNodal";
+import { createPortal } from "react-dom";
 
 const MovieItem = ({ title, url, rating, removeHandler, id }) => {
+  const [deleteModal, setDeleteModal] = useState(false);
+  console.log("deleteModal", deleteModal);
+
+  const toggleDeleteModal = () => {
+    setDeleteModal(!deleteModal);
+  };
+
   return (
     <DivContainer>
       <div style={{ width: "40%" }}>
@@ -14,6 +23,7 @@ const MovieItem = ({ title, url, rating, removeHandler, id }) => {
           width="100%"
           height="100%"
           src={url}
+          alt="myMovie"
         />
       </div>
 
@@ -36,13 +46,23 @@ const MovieItem = ({ title, url, rating, removeHandler, id }) => {
         >
           <Paragraph>{rating}/5</Paragraph>
           <Button
+            onClick={toggleDeleteModal}
             height="60px"
             width="100px"
-            onClick={() => removeHandler(id)}
             backgroundColor="red"
           >
             Delete
           </Button>
+          {deleteModal
+            ? createPortal(
+                <BtnNodal
+                id={id}
+                  onDelete={toggleDeleteModal}
+                  removeHandler={removeHandler}
+                />,
+                document.getElementById("modal")
+              )
+            : null}
           <Button height="60px" width="80px" backgroundColor="yellow">
             Edit
           </Button>
